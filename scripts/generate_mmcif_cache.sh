@@ -29,7 +29,7 @@ mkdir -p /work/hdd/bbgs/nwentao/data/exfold
 
 mmcif_dir="/work/hdd/bbgs/nwentao/data/pdb_mmcif/mmcif_files/"
 output_path="/work/hdd/bbgs/nwentao/data/exfold/mmcif_cache.json"
-log_path="/work/hdd/bbgs/nwentao/data/exfold/mmcif_cache_log.json"
+log_path="/work/hdd/bbgs/nwentao/data/exfold/generate_mmcif_cache.log"
 
 python scripts/generate_mmcif_cache.py \
     "$mmcif_dir" \

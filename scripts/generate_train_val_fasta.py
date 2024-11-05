@@ -79,14 +79,14 @@ def main(args):
         # keep the first chain only for identical chains in each file
         for k, v in deduplicate_dict(info["rna"]).items():
             rna_chains[f"{file_id}_{k}"] = v
-    print(f"Number of RNA chains: {len(rna_chains)}")
+    logging.info(f"Number of RNA chains: {len(rna_chains)}")
 
     # length >= 15
     tmp = {}
     for chain_id, seq in rna_chains.items():
         if len(seq) >= 15:
             tmp[chain_id] = seq
-    print(f"Number of RNA chains with length >= 15: {len(tmp)}, remove {len(rna_chains) - len(tmp)}")
+    logging.info(f"Number of RNA chains with length >= 15: {len(tmp)}, remove {len(rna_chains) - len(tmp)}")
     rna_chains = tmp
 
     # unk to X
@@ -101,7 +101,7 @@ def main(args):
         prop = seq.count(s) / len(seq)
         if prop < 0.9:
             tmp[chain_id] = seq
-    print(f"Number of RNA chains with <90% identical nucleotides: {len(tmp)}, remove {len(rna_chains) - len(tmp)}")
+    logging.info(f"Number of RNA chains with <90% identical nucleotides: {len(tmp)}, remove {len(rna_chains) - len(tmp)}")
     rna_chains = tmp
 
     # < 5% X
@@ -110,7 +110,7 @@ def main(args):
         prop = seq.count("X") / len(seq)
         if prop < 0.05:
             tmp[chain_id] = seq
-    print(f"Number of RNA chains with <5% X: {len(tmp)}, remove {len(rna_chains) - len(tmp)}")
+    logging.info(f"Number of RNA chains with <5% X: {len(tmp)}, remove {len(rna_chains) - len(tmp)}")
     rna_chains = tmp
 
     logging.info(f"Writing fasta to {args.fasta_path}")
