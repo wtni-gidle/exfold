@@ -23,13 +23,13 @@ unset __conda_setup
 ############################################################
 
 conda activate pldev
-cd /work/hhd/bbgs/nwentao/projects/exfold
+cd /work/hdd/bbgs/nwentao/projects/exfold
 
-mkdir -p /work/hhd/bbgs/nwentao/data/exfold
+mkdir -p /work/hdd/bbgs/nwentao/data/exfold
 
-mmcif_dir="/work/hhd/bbgs/nwentao/data/pdb_mmcif/mmcif_files/"
-output_path="/work/hhd/bbgs/nwentao/data/exfold/mmcif_cache.json"
-log_path="/work/hhd/bbgs/nwentao/data/exfold/mmcif_cache_log.json"
+mmcif_dir="/work/hdd/bbgs/nwentao/data/pdb_mmcif/mmcif_files/"
+output_path="/work/hdd/bbgs/nwentao/data/exfold/mmcif_cache.json"
+log_path="/work/hdd/bbgs/nwentao/data/exfold/mmcif_cache_log.json"
 
 python scripts/generate_mmcif_cache.py \
     "$mmcif_dir" \
