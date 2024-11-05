@@ -18,6 +18,6 @@ sbatch generate_mmcif_cache.sh
 python generate_train_val_fasta.py \
     /work/hdd/bbgs/nwentao/data/exfold/mmcif_cache.json \
     /work/hdd/bbgs/nwentao/data/exfold/generate_mmcif_cache.log \
-    /work/hdd/bbgs/nwentao/data/exfold/train_val.fasta > \
+    /work/hdd/bbgs/nwentao/data/exfold/train_val.fasta \
     /work/hdd/bbgs/nwentao/data/exfold/generate_train_val_fasta.log
 ```

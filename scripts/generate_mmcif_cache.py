@@ -49,7 +49,6 @@ def main(args):
     fn = partial(parse_file, results=results)
 
     with Pool(processes=args.no_workers) as pool:
-        # pool.imap_unordered(fn, cif_files, chunksize=args.chunksize)
         pool.map(fn, cif_files, chunksize=args.chunksize)
     
     with open(args.cache_path, "w") as fp:

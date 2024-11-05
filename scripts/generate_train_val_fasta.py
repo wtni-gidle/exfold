@@ -2,7 +2,6 @@ import json
 import logging
 import argparse
 
-logging.basicConfig(level=logging.INFO)
 
 DATE_CUTOFF = "2021-01-01"
 
@@ -26,7 +25,9 @@ def write_fasta(file_path, sequences):
 
 
 def main(args):
-    with open(args.log_path, "r") as f:
+    logging.basicConfig(level=logging.INFO, handlers=[logging.FileHandler(args.log_path)])
+    logging.basicConfig()
+    with open(args.cache_log_path, "r") as f:
         cache_log = f.read().splitlines()
 
     error_num = 0
@@ -124,12 +125,16 @@ if __name__ == "__main__":
         help="Path for .json mmcif cache"
     )
     parser.add_argument(
-        "log_path", type=str,
+        "cache_log_path", type=str,
         help="Path for .json mmcif cache log"
     )
     parser.add_argument(
         "fasta_path", type=str,
         help="Path for .fasta output"
+    )
+    parser.add_argument(
+        "log_path", type=str,
+        help="Path for .json mmcif cache log"
     )
     args = parser.parse_args()
 
