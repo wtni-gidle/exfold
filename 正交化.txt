@@ -1,0 +1,8 @@
+不论是使用什么正交化，我们的目标都是获得旋转矩阵（不失一般性，假设已知位移向量）。
+假设n个d维列向量组成矩阵X(dxn)，经过线性变换后得到Y(dxn)，其列正交。
+不同的正交化方法使用的线性变换不同，得到的Y也不同。
+由于我们的目标只是获得旋转矩阵（正交阵的一种），所以是从这个列正交的Y出发，要求n=d，则Y为方阵，从而为正交矩阵。
+对于svd正交化，X=UΣ(V^T)，这里Y=U(V^T)是列正交的，当要求n=d时，Y即为正交矩阵。然后对Y限制行列式为1即为旋转矩阵。
+这就是我们要的旋转变换。
+https://people.wou.edu/~beavers/Talks/LowdinJointMeetings0107.pdf
+https://igl.ethz.ch/projects/ARAP/svd_rot.pdf

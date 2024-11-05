@@ -1,0 +1,29 @@
+OpenFold精心复制了原始的开源单体（v2.0.1）和多聚物（v2.3.2）推理代码几乎所有功能
+OpenFold可以使用完整精度、半精度或bfloat16进行训练，可以使用或不使用DeepSpeed
+1. OpenFold可以通过我们实现的low-memory attention（Rabe & Staats 2021）来进行推理极长的链。OpenFold可以在单个A100上预测具有4000个以上残基的序列的结构，
+2. 甚至可以通过CPU offloading处理更长的序列。
+3. Custom CUDA attention kernels modified from FastFold's kernels。它们的GPU内存使用量分别比等效的FastFold和原始PyTorch实现少4倍和5倍。
+4. 使用原始AlphaFold HHblits/JackHMMER管道或ColabFold的高效对齐脚本，后者使用更快的MMseqs2。
+5. FlashAttention支持大大加快了MSA注意力的速度。
+6. DeepSpeed。DS4Sci_EvoformerAttention核心是OpenFold与DeepSpeed4Science倡议合作开发的一种内存高效的注意力核心。该核心大大加速了训练和推理过程，并且显著降低了模型的设备内存峰值需求，降低了13倍。该模型在初始训练和微调阶段快15%，推理过程中最多快4倍。要使用此功能，只需在openfold/config.py中设置use_deepspeed_evo_attention选项。
+
+杂项：
+1. chunking（如 AlphaFold 2 补充的第 1.11.8 节中定义）在推理模式下默认启用，要禁用它，请在配置中将 globals.chunk_size 设置为 None 。如果指定了一个值，OpenFold 将尝试动态调整它，将配置中指定的块大小视为最小值。无论输入序列长度如何，此调整过程都会自动确保一致的快速运行时间，但它也会引入一些运行时间可变性，这对于某些用户来说可能是不希望的。 还建议对于很长的链禁用此功能（见下文）。 为此，请将配置中的tune_chunk_size 选项设置为False。
+2. 要在推理过程中获得加速，请在配置中启用 FlashAttention。 请注意，它似乎最适合残基数 < 1000 的序列。
+3. 为了最大限度地减少长序列推理期间的内存使用量，请考虑以下更改：
+正如AlphaFold-Multimer论文中所指出的，AlphaFold/OpenFold template stack是长序列推理的一个主要内存瓶颈。为了解决这个问题，OpenFold支持两种互斥的推理模式。①config中的template中的average_template，类似于AlphaFold-Multimer的做法，简单的对单个模板表示做平均。openfold：modified slightly to accommodate weights trained using the standard template algorithm。②offload_templates。将单个模板嵌入临时转移到CPU内存中。前者是一种近似方法，而后者略慢一些；两者都是内存高效的，并允许模型在不同长度的序列上利用任意多的模板。默认情况下，两者都被禁用，用户可以自行决定哪种最适合他们的需求。
+推理时低内存注意力（LMA）可以在模型配置中启用。这种设置以速度为代价，大大提高了内存使用效率。默认情况下，LMA使用1024和4096的查询和键块大小运行。
+对于长序列，禁用tune_chunk_size。在某个临界点之后，它只会浪费时间。
+作为最后的手段，考虑启用offload_inference。这将在模型的各个瓶颈处启用更广泛的CPU卸载。
+禁用FlashAttention，在长序列上似乎不稳定。
+
+在使用最保守的设置时，我们能够使用单个A100运行一个4600个残基的复合物的推理。
+
+可以使用 script/build_deepspeed_config.py 生成合适的 DeepSpeed 配置文件。
+
+alignment_index可以加快I/O瓶颈环境中的训练速度
+
+chunk: 用于推理, 位于chunk_utils
+cpu_offloading: 用于推理, 如果启用, 一般inplace_safe也启用
+activation checkpointing: 用于训练, 位于checkpointing.py(其中也兼容了推理时直接inference)
+使用cpu_offloading时, 用input_tensors代替m和z
