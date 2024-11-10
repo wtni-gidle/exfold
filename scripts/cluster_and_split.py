@@ -16,7 +16,7 @@ def run_cd_hit(input_fasta, output_file, n_cpu):
         "-M", "0",
         "-T", str(n_cpu),
     ]
-    subprocess.run(cmd, shell=True, check=True)
+    subprocess.run(cmd, check=True)
 
 
 def parse_clusters(text):
