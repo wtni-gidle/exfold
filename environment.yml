@@ -9,5 +9,6 @@ dependencies:
   - pytorch-lightning==1.8.6
   - biopython==1.83
   - pytorch::pytorch=1.12.*
+  - bioconda::cd-hit
   - pip:
       - deepspeed==0.12.4
