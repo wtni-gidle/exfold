@@ -24,7 +24,7 @@ def run_ss(desc_seq_pair: Tuple[str, str], ss_runner: SSRunner, output_dir):
     
     fd, fasta_path = tempfile.mkstemp(suffix=".fasta")
     with os.fdopen(fd, 'w') as fp:
-        fp.write(f'>seq\n{seq}')
+        fp.write(f'>seq\n{seq}\n')
     
     ss_runner.run(
         fasta_path=fasta_path,

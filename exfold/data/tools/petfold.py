@@ -25,8 +25,9 @@ class PETfold(utils.SSPredictor):
 
             input_path = os.path.join(tmp_dir, "input.fasta")
             # petfold need MSA as input
+            alignments = input_fasta * 3 if input_fasta.endswith("\n") else (input_fasta + "\n") * 3
             with open(input_path, "w") as f:
-                f.write(input_fasta * 3)
+                f.write(alignments)
 
             pp_file = os.path.join(tmp_dir, "petfold.pp")
             
