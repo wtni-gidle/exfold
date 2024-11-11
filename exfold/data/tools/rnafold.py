@@ -48,7 +48,6 @@ class RNAfold(utils.SSPredictor):
             # extract dot-bracket notation
             with open(outfile_path, "r") as f:
                 ss_str = f.read()
-            print(ss_str)
             dbn = self._extract_DBN(ss_str)
 
             # extract probability matrix lines
@@ -67,6 +66,7 @@ class RNAfold(utils.SSPredictor):
 
         return raw_output
     
+    @staticmethod
     def _extract_DBN(ss_str: str) -> str:
         """extract dot-bracket notation"""
         ss_str = ss_str.split("\n")
@@ -74,6 +74,7 @@ class RNAfold(utils.SSPredictor):
 
         return dbn
 
+    @staticmethod
     def _extract_prob_mat(dp_str: str) -> str:
         """
         extract probability matrix lines

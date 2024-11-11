@@ -63,6 +63,7 @@ class PETfold(utils.SSPredictor):
 
         return raw_output
     
+    @staticmethod
     def _extract_DBN(stdout: str) -> str:
         """extract dot-bracket notation"""
         for line in stdout.splitlines():
@@ -72,6 +73,7 @@ class PETfold(utils.SSPredictor):
 
         return dbn
     
+    @staticmethod
     def _extract_prob_mat(pp_str: str) -> str:
         """
         extract probability matrix lines
