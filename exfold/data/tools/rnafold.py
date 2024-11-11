@@ -15,7 +15,7 @@ class RNAfold(utils.SSPredictor):
         self.binary_path = binary_path
     
     #! 即使不报错，也可能出现空文件，所以需要后续检查文件内容
-    def predict(self, input_fasta_path: str, raise_error: bool = True) -> Dict[str, str]:
+    def predict(self, input_fasta_path: str) -> Dict[str, str]:
         """
         输出的key即format, value必须是字符串
         """
@@ -36,21 +36,14 @@ class RNAfold(utils.SSPredictor):
             with utils.timing(f"RNAfold predict..."):
                 result = subprocess.run(cmd, capture_output=True, text=True)
                 retcode = result.returncode
-                stdout = result.returncode
+                stdout = result.stdout
                 stderr = result.stderr
 
             if retcode:
-                if raise_error:
-                    os.chdir(ori_dir)
-                    raise RuntimeError(
-                        f"RNAfold failed for {input_fasta_path}\nstdout:\n{stdout}\nstderr:\n{stderr}\n"
-                    )
-                else:
-                    # Logs have a 15k character limit, so log error line by line.
-                    logging.error(f"RNAfold failed for {input_fasta_path}")
-                    for error_line in stderr.splitlines():
-                        if error_line.strip():
-                            logging.error(error_line.strip())
+                os.chdir(ori_dir)
+                raise RuntimeError(
+                    f"RNAfold failed for {input_fasta_path}\nstdout:\n{stdout}\nstderr:\n{stderr}\n"
+                )
             
             # extract dot-bracket notation
             with open(outfile_path, "r") as f:
@@ -83,7 +76,7 @@ class RNAfold(utils.SSPredictor):
     def _extract_prob_mat(dp_str: str) -> str:
         """
         extract probability matrix lines
-        list of lines, 每一行格式如下：
+        每一行格式如下：
         i j sqrt(p)
         """
         dp_str = dp_str.split("\n")

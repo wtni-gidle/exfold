@@ -109,3 +109,18 @@ def parse_rnafold(dbn_string: str, prob_string: str) -> SS:
         prob=prob_matrix
     )
 
+
+def parse_petfold(dbn_string: str, prob_string: str) -> SS:
+    # base pair
+    ss_matrix = _parse_dbn(dbn_string)
+
+    # probability map
+    prob_matrix = []
+    for line in prob_string.splitlines():
+        prob_matrix.append([float(i) for i in line.split(" ")])
+    prob_matrix = np.array(prob_matrix, dtype=np.float32)
+
+    return SS(
+        pair=ss_matrix,
+        prob=prob_matrix
+    )

@@ -3,13 +3,14 @@ import numpy as np
 import os
 
 from exfold.data import parsers, mmcif_parsing
-from exfold.data.tools import rnafold
+from exfold.data.tools import rnafold, petfold
 from exfold.data.tools.utils import SSPredictor
 from exfold.common import nucleic_constants as nc
 
 FeatureDict = Dict[str, np.ndarray]
 SS_PARSERS = {
-    "rnafold": parsers.parse_rnafold
+    "rnafold": parsers.parse_rnafold,
+    "petfold": parsers.parse_petfold
 }
 
 
@@ -250,7 +251,7 @@ class DataPipeline:
 
 
 def run_ss_tool(
-    ss_runner: SSPredictor, # todo建立一个基类
+    ss_runner: SSPredictor,
     fasta_path: str,
     ss_out_prefix: str
 ) -> Dict[str, str]:
@@ -268,11 +269,18 @@ class SSRunner:
     def __init__(
         self,
         rnafold_binary_path: Optional[str] = None,
+        petfold_binary_path: Optional[str] = None,
     ):
-        self.rnafold_binary_runner = None
+        self.rnafold_runner = None
         if rnafold_binary_path is not None:
             self.rnafold_runner = rnafold.RNAfold(
                 binary_path=rnafold_binary_path
+            )
+        
+        self.petfold_runner = None
+        if petfold_binary_path is not None:
+            self.petfold_runner = petfold.PETfold(
+                binary_path=petfold_binary_path
             )
     
     def run(
@@ -290,4 +298,12 @@ class SSRunner:
                 ss_runner=self.rnafold_runner,
                 fasta_path=fasta_path,
                 ss_out_prefix=rnafold_out_prefix,
+            )
+        
+        if self.petfold_runner is not None:
+            petfold_out_prefix = os.path.join(output_dir, "petfold")
+            run_ss_tool(
+                ss_runner=self.petfold_runner,
+                fasta_path=fasta_path,
+                ss_out_prefix=petfold_out_prefix,
             )
