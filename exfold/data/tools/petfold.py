@@ -38,7 +38,7 @@ class PETfold(utils.SSPredictor):
             cmd = [self.binary_path] + cmd_flags
 
             logging.info('Launching subprocess "%s"', " ".join(cmd))
-            with utils.timing(f"PETfold predict..."):
+            with utils.timing(f"PETfold predict"):
                 result = subprocess.run(cmd, capture_output=True, text=True)
                 retcode = result.returncode
                 stdout = result.stdout

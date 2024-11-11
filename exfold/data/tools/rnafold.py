@@ -33,7 +33,7 @@ class RNAfold(utils.SSPredictor):
             cmd = [self.binary_path] + cmd_flags + [input_fasta_path]
             
             logging.info('Launching subprocess "%s"', " ".join(cmd))
-            with utils.timing(f"RNAfold predict..."):
+            with utils.timing(f"RNAfold predict"):
                 result = subprocess.run(cmd, capture_output=True, text=True)
                 retcode = result.returncode
                 stdout = result.stdout
