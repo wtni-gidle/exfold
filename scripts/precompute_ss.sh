@@ -28,7 +28,7 @@ cd /work/hdd/bbgs/nwentao/projects/exfold
 mkdir -p /work/hdd/bbgs/nwentao/data/exfold
 
 fasta_path="/work/hdd/bbgs/nwentao/data/exfold/train_val.fasta"
-output_dir="/work/hdd/bbgs/nwentao/data/exfold/ss_dir"
+output_dir="/work/hdd/bbgs/nwentao/data/exfold/ss"
 log_path="/work/hdd/bbgs/nwentao/data/exfold/precompute_ss.log"
 
 python scripts/precompute_ss.py \
