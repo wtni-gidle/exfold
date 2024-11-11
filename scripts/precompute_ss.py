@@ -55,7 +55,7 @@ def main(args):
     )
     fn = partial(run_ss, ss_runner=ss_runner, output_dir=args.output_dir)
 
-    with Pool(args.num_workers) as pool:
+    with Pool(args.no_workers) as pool:
         pool.map(fn, desc_seq_pairs, chunksize=args.chunksize)
     
     total_time = time.perf_counter() - start
