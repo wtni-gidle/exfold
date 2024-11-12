@@ -35,6 +35,6 @@ python scripts/precompute_ss.py \
     $fasta_path \
     $output_dir \
     $log_path \
-    --no_workers 64 \
+    --no_workers 32 \
 
 echo "Done"
