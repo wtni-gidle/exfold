@@ -82,7 +82,7 @@ class PETfold(utils.SSPredictor):
         每一行格式如下：
         i j p
         """
-        np.genfromtxt(pp_file, skip_header=1, skip_footer=1)
+        prob_matrix = np.genfromtxt(pp_file, skip_header=1, skip_footer=1)
         prob_matrix = csr_matrix(prob_matrix)
         prob_str = ""
         for row, col in zip(*prob_matrix.nonzero()):
