@@ -55,9 +55,7 @@ class PETfold(utils.SSPredictor):
             dbn = self._extract_DBN(stdout)
 
             # extract probability matrix lines
-            with open(pp_file, "r") as f:
-                pp_str = f.read()
-            prob = self._extract_prob_mat(pp_str)
+            prob = self._extract_prob_mat(pp_file)
         
         raw_output = {
             "dbn": dbn,
@@ -77,18 +75,14 @@ class PETfold(utils.SSPredictor):
         return dbn
     
     @staticmethod
-    def _extract_prob_mat(pp_str: str) -> str:
+    def _extract_prob_mat(pp_file: str) -> str:
         """
         extract probability matrix and only write nonzeros.
         This is very inelegant, but idk how else to reduce storage size.
         每一行格式如下：
         i j p
         """
-        prob_matrix = []
-        for line in pp_str.splitlines():
-            if line.strip():
-                prob_matrix.append([float(i) for i in line.strip().split(" ")])
-        prob_matrix = np.array(prob_matrix[1:-1])
+        np.genfromtxt(pp_file, skip_header=1, skip_footer=1)
         prob_matrix = csr_matrix(prob_matrix)
         prob_str = ""
         for row, col in zip(*prob_matrix.nonzero()):
