@@ -94,6 +94,6 @@ class PETfold(utils.SSPredictor):
         for row, col in zip(*prob_matrix.nonzero()):
             if row <= col:
                 value = prob_matrix[row, col]
-                prob_str += f"{row} {col} {value}\n"
+                prob_str += f"{row+1} {col+1} {value}\n"
                 
         return prob_str
