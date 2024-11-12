@@ -10,5 +10,6 @@ dependencies:
   - biopython==1.83
   - pytorch::pytorch=1.12.*
   - bioconda::cd-hit
+  - scipy
   - pip:
       - deepspeed==0.12.4

@@ -41,7 +41,6 @@ def parse_file(cif_path, results: Dict):
 def main(args):
     logging.basicConfig(level=logging.WARNING, handlers=[logging.FileHandler(args.log_path)])
     
-    logging.warning(f"Start parsing mmcif files, logs saved in {args.log_path}...")
     start = time.perf_counter()
     cif_files = [os.path.join(args.mmcif_dir, file) for file in os.listdir(args.mmcif_dir)]
 

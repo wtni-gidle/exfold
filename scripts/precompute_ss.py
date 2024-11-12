@@ -34,17 +34,15 @@ def run_ss(desc_seq_pair: Tuple[str, str], ss_runner: SSRunner, output_dir):
     except Exception as e:
         logging.error(e)
         logging.error(f"Failed to run ss for {desc}. Skipping...")
-        os.remove(fasta_path)
         os.rmdir(ss_dir)
-        return
 
     os.remove(fasta_path)
+    logging.warning(f"Finished running ss for {desc}")
 
 
 def main(args):
     logging.basicConfig(level=logging.WARNING, handlers=[logging.FileHandler(args.log_path)])
     
-    logging.warning(f"Start precomputing ss, logs saved in {args.log_path}...")
     start = time.perf_counter()
 
     desc_seq_map = {record.id: str(record.seq) for record in SeqIO.parse(args.fasta_path, "fasta")}

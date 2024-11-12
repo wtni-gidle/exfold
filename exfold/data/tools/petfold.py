@@ -4,6 +4,8 @@ import os
 import logging
 import subprocess
 import tempfile
+import numpy as np
+from scipy.sparse import csr_matrix
 
 from exfold.data.tools import utils
 
@@ -77,16 +79,21 @@ class PETfold(utils.SSPredictor):
     @staticmethod
     def _extract_prob_mat(pp_str: str) -> str:
         """
-        extract probability matrix lines
+        extract probability matrix and only write nonzeros.
+        This is very inelegant, but idk how else to reduce storage size.
         每一行格式如下：
-        P_{1,1} ... P_{1,n}
-        ...
-        P_{n,1} ... P_{n,n}
+        i j p
         """
-        lines = []
+        prob_matrix = []
         for line in pp_str.splitlines():
             if line.strip():
-                lines.append(line.strip())
-        prob = "\n".join(lines[1:-1])
-
-        return prob
+                prob_matrix.append([float(i) for i in line.strip().split(" ")])
+        prob_matrix = np.array(prob_matrix[1:-1])
+        prob_matrix = csr_matrix(prob_matrix)
+        prob_str = ""
+        for row, col in zip(*prob_matrix.nonzero()):
+            if row <= col:
+                value = prob_matrix[row, col]
+                prob_str += f"{row} {col} {value}\n"
+                
+        return prob_str

@@ -2,13 +2,13 @@
 #SBATCH --job-name="precompute_ss"
 #SBATCH --partition=cpu
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=64
-#SBATCH --mem-per-cpu=2G
+#SBATCH --ntasks-per-node=32
+#SBATCH --mem-per-cpu=3G
 #SBATCH --output="precompute_ss.%j.%N.out"
 #SBATCH --error="precompute_ss.%j.%N.out"
 #SBATCH --account=bbgs-delta-cpu
 #SBATCH --export=ALL
-#SBATCH -t 04:00:00
+#SBATCH -t 24:00:00
 
 # make the script stop when error (non-true exit code) occurs
 set -e
